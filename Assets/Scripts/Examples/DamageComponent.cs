@@ -5,11 +5,14 @@ namespace Examples
 {
     public class DamageComponent : MonoBehaviour
     {
-        [SerializeField] private int _damage;
+        [SerializeField] private Vector2 _damage;
 
-        public void GiveDamage(string damageResolver = "unknown")
+        public float LastAppliedDamage { get; private set; } = 0;
+        
+        public void GiveDamage(HealthComponent healthComponent)
         {
-            PublisherSubscriber.Publish(new DamageEvent(_damage,damageResolver));
+            LastAppliedDamage = Random.Range(_damage.x, _damage.y);
+            healthComponent.ChangeHealth(-LastAppliedDamage);
         }
     }
 }
