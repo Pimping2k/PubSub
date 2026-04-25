@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UIPlayerStats : MonoBehaviour, IEvent<PlayerStatsEvent>
+    public class UIPlayerStats : MonoBehaviour
     {
         [SerializeField] private TMP_Text _playerHealth;
         [SerializeField] private TMP_Text _playerLastDamage;
@@ -17,15 +17,15 @@ namespace UI
 
         private void OnEnable()
         {
-            PublisherSubscriber.Subscribe<PlayerStatsEvent>(this);
+            PublisherSubscriber.Subscribe<PlayerStatsEvent>(OnStatsReceived);
         }
 
         private void OnDisable()
         {
-            PublisherSubscriber.Unsubscribe<PlayerStatsEvent>(this);
+            PublisherSubscriber.Unsubscribe<PlayerStatsEvent>(OnStatsReceived);
         }
-
-        public void Publish(PlayerStatsEvent info)
+        
+        private void OnStatsReceived(PlayerStatsEvent info)
         {
             Debug.Log($"UI Received: HP {info.Health}, Damage {info.LastDamage}");
             _playerHealth.text = info.Health.ToString();

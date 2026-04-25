@@ -2,7 +2,7 @@
 
 namespace Events
 {
-    public struct PlayerStatsEvent
+    public struct PlayerStatsEvent : IEvent
     {
         public float LastDamage;
         public float Health;

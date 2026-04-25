@@ -4,42 +4,43 @@ using UnityEngine;
 
 public class PublisherSubscriber
 {
-    private static readonly Dictionary<Type, List<object>> _subscribers = new();
+    private static readonly Dictionary<Type, ISubscriptionList> _subscribers = new();
 
-    public static void Subscribe<T>(object subscriber) where T : struct
-    { 
-        if (!_subscribers.ContainsKey(typeof(T)))
+    public static void Subscribe<T>(Action<T> callback) where T : struct, IEvent
+    {
+        var type = typeof(T);
+        if (!_subscribers.TryGetValue(type, out var list))
         {
-            _subscribers[typeof(T)] = new List<object>();
+            list = new SubscriptionList<T>();
+            _subscribers[type] = list;
         }
-        
-        _subscribers[typeof(T)].Add(subscriber);
+
+        ((SubscriptionList<T>)list).Handlers.Add(callback);
     }
 
-    public static void Unsubscribe<T>(object subscriber) where T : struct
+    public static void Unsubscribe<T>(Action<T> callback) where T : struct, IEvent
     {
-        if(!_subscribers.ContainsKey(typeof(T)))
+        if (_subscribers.TryGetValue(typeof(T), out var list))
         {
-            Debug.Log("Don't subscribed " + typeof(T).FullName);
-            return;
-        }
-        
-        _subscribers[typeof(T)].Remove(subscriber);
-    }
+            var typedList = (SubscriptionList<T>)list;
+            typedList.Handlers.Remove(callback);
 
-    public static void Publish<T>(T info) where T : struct
-    {
-        if (!_subscribers.ContainsKey(typeof(T)))
-        {
-            Debug.Log("Dont have this subscriber " + typeof(T).FullName);
-            return;
-        }
-        
-        if(_subscribers.TryGetValue(typeof(T), out List<object> subscribers))
-        {
-            for (int i = 0; i < subscribers.Count; i++)
+            if (typedList.Handlers.Count == 0)
             {
-                ((IEvent<T>)subscribers[i]).Publish(info);
+                _subscribers.Remove(typeof(T));
+            }
+        }
+    }
+    
+    public static void Publish<T>(T payload) where T : struct, IEvent
+    {
+        if (_subscribers.TryGetValue(typeof(T), out var list))
+        {
+            var handlers = ((SubscriptionList<T>)list).Handlers;
+            
+            for (int i = handlers.Count - 1; i >= 0; i--)
+            {
+                handlers[i]?.Invoke(payload);
             }
         }
     }

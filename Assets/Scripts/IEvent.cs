@@ -1,6 +1,5 @@
 using UnityEngine;
 
-public interface IEvent<T> where T : struct
+public interface IEvent
 {
-    void Publish(T info);
 }
