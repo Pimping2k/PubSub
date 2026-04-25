@@ -13,18 +13,14 @@ namespace UI
         private void Awake()
         {
             Setup();
-        }
-
-        private void OnEnable()
-        {
             PublisherSubscriber.Subscribe<PlayerStatsEvent>(OnStatsReceived);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             PublisherSubscriber.Unsubscribe<PlayerStatsEvent>(OnStatsReceived);
         }
-        
+
         private void OnStatsReceived(PlayerStatsEvent info)
         {
             Debug.Log($"UI Received: HP {info.Health}, Damage {info.LastDamage}");

@@ -25,6 +25,11 @@ namespace Examples
             {
                 _damageComponent.GiveDamage(_healthComponent);
             }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                PublisherSubscriber.Publish(new RandomLetterEvent());
+            }
         }
 
         private void OnHealthChanged(float health)
