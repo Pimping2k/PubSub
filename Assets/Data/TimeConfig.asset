@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e37eb38f59044bfb599935d493b1e46, type: 3}
   m_Name: TimeConfig
   m_EditorClassIdentifier: 
+  _time: 15

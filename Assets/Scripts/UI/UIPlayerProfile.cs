@@ -23,5 +23,15 @@ namespace UI
             Debug.Log($"UIPlayerProfile player name :  {_authService.Name}");
             _playerName.text = _authService.Name;
         }
+
+        private void Awake()
+        {
+            _authService.NameChanged += OnNameChanged;
+        }
+
+        private void OnNameChanged()
+        {
+            _playerName.text = _authService.Name;
+        }
     }
 }
