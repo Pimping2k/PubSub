@@ -48,4 +48,5 @@ MonoBehaviour:
   _inputService: {fileID: 0}
   _playerCreateService: {fileID: 0}
   _gameSettings: {fileID: 11400000, guid: 0a67e2ed3227026409f282e90cbfa3ed, type: 2}
-  _timeConfig: {fileID: 11400000, guid: c94adb19492c2824e9c2dfa5586d47de, type: 2}
+  _timeConfigFirst: {fileID: 11400000, guid: c94adb19492c2824e9c2dfa5586d47de, type: 2}
+  _timeConfigSecond: {fileID: 11400000, guid: 8bc627746f9ed5e43b221a550d91afc3, type: 2}

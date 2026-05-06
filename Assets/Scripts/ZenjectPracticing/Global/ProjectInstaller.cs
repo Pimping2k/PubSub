@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Zenject;
 using ZenjectPracticing.Configs;
+using ZenjectPracticing.Interfaces;
+using ZenjectPracticing.Local;
 
 namespace ZenjectPracticing.Global
 {
@@ -12,7 +14,8 @@ namespace ZenjectPracticing.Global
         [SerializeField] private PlayerCreateService _playerCreateService;
         [Header("Configs")]
         [SerializeField] private GameSettings _gameSettings;
-        [SerializeField] private TimeConfig _timeConfig;
+        [SerializeField] private TimeConfig _timeConfigFirst;
+        [SerializeField] private TimeConfig _timeConfigSecond;
         
         public override void InstallBindings()
         {
@@ -20,7 +23,11 @@ namespace ZenjectPracticing.Global
             Container.BindInterfacesAndSelfTo<InputService>().FromComponentInNewPrefab(_inputService).AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<PlayerCreateService>().FromComponentInNewPrefab(_playerCreateService).AsSingle().NonLazy();
             
-            Container.BindInstance(_timeConfig).AsSingle();
+            Container.Bind<IGeneralService>().To<ServiceFirst>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+            Container.Bind<IGeneralService>().To<ServiceSecond>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+            
+            Container.BindInstance(_timeConfigFirst).WithId("FirstTime");
+            Container.BindInstance(_timeConfigSecond).WithId("SecondTime");
             Container.BindInstance(_gameSettings).AsSingle();
         }
     }
